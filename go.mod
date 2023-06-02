@@ -1,28 +1,30 @@
 module github.com/keenangit/pasaman
 
-go 1.16
+go 1.12
 
 require (
-	github.com/gin-contrib/gzip v0.0.1
-	github.com/gin-gonic/gin v1.7.2
-	github.com/go-gorp/gorp v2.2.0+incompatible
-	github.com/go-playground/validator/v10 v10.8.0
-	github.com/go-redis/redis/v7 v7.3.0
-	github.com/go-sql-driver/mysql v1.7.1 // indirect
-	github.com/golang-jwt/jwt/v4 v4.1.0
-	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.3.0
+	github.com/ShkrutDenis/go-migrations v1.2.1
+	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef // indirect
+	github.com/denisenkom/go-mssqldb v0.0.0-20200206145737-bbfc9a55622e // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-openapi/spec v0.20.5 // indirect
+	github.com/go-openapi/swag v0.21.1 // indirect
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
+	github.com/go-sql-driver/mysql v1.5.0
+	github.com/jinzhu/gorm v1.9.12
+	github.com/jinzhu/now v1.1.1 // indirect
+	github.com/jmoiron/sqlx v1.2.0
 	github.com/joho/godotenv v1.3.0
-	github.com/json-iterator/go v1.1.11 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
-	github.com/lib/pq v1.5.2
-	github.com/mattn/go-isatty v0.0.17 // indirect
-	github.com/mattn/go-sqlite3 v1.14.17 // indirect
-	github.com/poy/onpar v1.1.2 // indirect
-	github.com/stretchr/testify v1.8.1
-	github.com/ziutek/mymysql v1.5.4 // indirect
-	golang.org/x/crypto v0.8.0
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
+	github.com/labstack/echo/v4 v4.1.16
+	github.com/lib/pq v1.4.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
+	github.com/selvatico/go-mocket v1.0.7
+	github.com/stretchr/testify v1.7.0
+	github.com/swaggo/echo-swagger v1.0.0
+	github.com/swaggo/swag v1.8.1 // indirect
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+	golang.org/x/net v0.0.0-20220421235706-1d1ef9303861 // indirect
+	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150 // indirect
+	golang.org/x/tools v0.1.10 // indirect
 )

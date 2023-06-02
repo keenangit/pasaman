@@ -1,200 +1,114 @@
-![alt tag](https://upload.wikimedia.org/wikipedia/commons/2/23/Golang.png)
+# Overview
+It's an API Skeleton project based on Echo framework.
+Our aim is reducing development time on default features that you can meet very often when your work on API.
+There is a useful set of tools that described below. Feel free to contribute!
 
-[![License](https://img.shields.io/github/license/Massad/gin-boilerplate)](https://github.com/keenangit/pasaman/blob/master/LICENSE) [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Massad/gin-boilerplate)](https://github.com/keenangit/pasaman/releases) [![Go Version](https://img.shields.io/github/go-mod/go-version/Massad/gin-boilerplate)](https://github.com/keenangit/pasaman/blob/master/go.mod) [![DB Version](https://img.shields.io/badge/DB-PostgreSQL--latest-blue)](https://github.com/keenangit/pasaman/blob/master/go.mod) [![DB Version](https://img.shields.io/badge/DB-Redis--latest-blue)](https://github.com/keenangit/pasaman/blob/master/go.mod)
+## What's inside:
 
-[![Build Status](https://travis-ci.org/Massad/gin-boilerplate.svg?branch=master)](https://travis-ci.org/Massad/gin-boilerplate) [![Go Report Card](https://goreportcard.com/badge/github.com/keenangit/pasaman)](https://goreportcard.com/report/github.com/keenangit/pasaman)
+- Registration
+- Authentication with JWT
+- CRUD API for posts
+- Migrations
+- Request validation
+- Swagger docs
+- Environment configuration
+- Docker development environment
 
-[![Join the chat at https://gitter.im/Massad/gin-boilerplate](https://badges.gitter.im/Massad/gin-boilerplate.svg)](https://gitter.im/Massad/gin-boilerplate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## Usage
+1. Copy .env.dist to .env and set the environment variables. There are examples for all the environment variables except COMPOSE_USER_ID, COMPOSE_GROUP_ID which are used by the linter. To get the current user ID, run in terminal:
+    
+    `echo $UID`
+    
+    In the .env file set these variables:
 
-Welcome to **Golang Gin boilerplate** v2
+    `COMPOSE_USER_ID="username in current system"` - your username in system
 
-The fastest way to deploy a restful api's with [Gin Framework](https://github.com/gin-gonic/gin/) with a structured project that defaults to **PostgreSQL** database and **JWT** authentication middleware stored in **Redis**
+    `COMPOSE_GROUP_ID="user uid"` - the user ID which you got in the terminal
 
-## Configured with
+2. Run your application using the command in the terminal:
 
-- [go-gorp](https://github.com/go-gorp/gorp): Go Relational Persistence
-- [jwt-go](https://github.com/golang-jwt/jwt): JSON Web Tokens (JWT) as middleware
-- [go-redis](https://github.com/go-redis/redis): Redis support for Go
-- Go Modules
-- Built-in **Custom Validators**
-- Built-in **CORS Middleware**
-- Built-in **RequestID Middleware**
-- Feature **PostgreSQL 12** with JSON/JSONB queries & trigger functions
-- SSL Support
-- Enviroment support
-- Unit test
-- And few other important utilties to kickstart any project
+    `docker-compose up`
+3. Browse to {HOST}:{PORT}/swagger/index.html. You will see Swagger 2.0 API documents.
+4. Using the API documentation, make requests to register a user (if necessary) and login.
+5. After the successful login, copy a token from the response, then click "Authorize" and in a popup that opened, enter the value for "apiKey" in a form:
+"Bearer {token}". For example:
 
-### Installation
 
-```
-$ go get github.com/keenangit/pasaman
-```
+    Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODk0NDA5NjYsIm9yaWdfaWF0IjoxNTg5NDM5OTY2LCJ1c2VyX2lkIjo1fQ.f8dSG3NxFLHwyA5-XIYALT5GtXm4eiH-motqtqAUBOI 
 
-```
-$ cd $GOPATH/src/github.com/keenangit/pasaman
-```
+   
+Then, click "Authorize" and close the popup.
+Now, you are able to make requests which require authentication.
 
-```
-$ go mod init
-```
+## Directories
+1. **/cmd** entry points.
 
-```
-$ go install
-```
+2. **/config** has structures which contains service config.
 
-You will find the **database.sql** in `db/database.sql`
+3. **/db** has seeders and method for connecting to the database.
 
-And you can import the postgres database using this command:
+4. **/deploy** contains the container (Docker) package configuration and template(docker-compose) for project deployment.
 
-```
-$ psql -U postgres -h localhost < ./db/database.sql
-```
+5. **/development** includes Docker and docker-compose files for setup linter.
 
-Tip:
+6. **/migrations** has files for run migrations.
 
-You will find that we added 2 trigger functions to the dabatase:
+7. **/models** includes structures describing data models.
 
-- `public.created_at_column()`
-- `public.update_at_column()`
+8. **/repositories** contains methods for selecting entities from the database.
 
-Those are added to the `updated_at` and `created_at` columns to update the latest timestamp automatically in both **user** and **article** tables. You can explore the tables and public schema for more info.
+9. **/requests** has structures describing the parameters of incoming requests, and validator.
 
-## Running Your Application
+10. **/responses** includes structures describing the parameters of outgoing response.
 
-Rename .env_rename_me to .env and place your credentials
+11. **/server** is the main project folder. This folder contains the executable server.go.
 
-```
-$ mv .env_rename_me .env
-```
+12. **/server/builders** contains builders for initializing entities.
 
-Generate SSL certificates (Optional)
+13. **/server/handlers** contains request handlers.
 
-> If you don't SSL now, change `SSL=TRUE` to `SSL=FALSE` in the `.env` file
+14. **/server/routes** has a file for configuring routes.
 
-```
-$ mkdir cert/
-```
+15. **/services** contains methods for creating entities.
 
-```
-$ sh generate-certificate.sh
-```
+16. **/tests**  includes tests and test data.
 
-> Make sure to change the values in .env for your databases
+## Code quality
+For control code quality we are use [golangci-lint](https://github.com/golangci/golangci-lint).
+Golangci-lint is a linters aggregator.
 
-```
-$ go run *.go
-```
+Why we use linters? Linters help us:
+1. Finding critical bugs
+2. Finding bugs before they go live
+3. Finding performance errors
+4. To speed up the code review, because reviewers do not spend time searching for syntax errors and searching for
+violations of generally accepted code style
+5. The quality of the code is guaranteed at a fairly high level.
 
-## Building Your Application
+### How to use
+Linter tool wrapped to docker-compose and first of all need to build container with linters
 
-```
-$ go build -v
-```
+- `make lint-build`
 
-```
-$ ./gin-boilerplate
-```
+Next you need to run linter to check bugs ant errors
 
-## Testing Your Application
+- `make lint-check` - it will log to console what bugs and errors linters found
 
-```
-$ go test -v ./tests/*
-```
+Finally, you need to fix all problems manually or using autofixing (if it's supported by the linter)
 
-## Import Postman Collection (API's)
+- `make lint-fix` 
 
-Download [Postman](https://www.getpostman.com/) -> Import -> Import From Link
 
-https://www.postman.com/collections/7f941b400a88ddd9c137
+## Libraries
+Migrations - https://github.com/ShkrutDenis/go-migrations
 
-Includes the following:
+Jwt - https://github.com/dgrijalva/jwt-go
 
-- User
-  - Login
-  - Register
-  - Logout
-- Article
-  - Create
-  - Update
-  - Get Article
-  - Get Articles
-  - Delete
-- Auth
-  - Refresh Token
+Swagger - https://github.com/swaggo/echo-swagger
 
-> In Login request in Tests tab:
+Mocking db - https://github.com/selvatico/go-mocket
 
-```
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-
-    var jsonData = JSON.parse(responseBody);
-    pm.globals.set("token", jsonData.token.access_token);
-    pm.globals.set("refresh_token", jsonData.token.refresh_token);
-
-});
-```
-
-It captures the `access_token` from the success login in the **global variable** for later use in other requests.
-
-Also, you will find in each request that needs to be authenticated you will have the following:
-
-    Authorization -> Bearer Token with value of {{token}}
-
-It's very useful when you want to test the APIs in Postman without copying and pasting the tokens.
-
-## On You
-
-You will need to implement the `refresh_token` mechanism in your application (Frontend).
-
-> We have the `/v1/token/refresh` API here to use it.
-
-_For example:_
-
-If the API sends `401` Status Unauthorized, then you can send the `refresh_token` that you stored it before from the Login API in POST `/v1/token/refresh` to receive the new `access_token` & `refresh_token` and store them again. Now, if you receive an error in refreshing the token, that means the user will have to Login again as something went wrong.
-
-That's just an example, of course you can implement your own way.
-
-## Version 1
-
-    No longer supported
-
-You will find the last update on v1 in [v1-session-cookies-auth](https://github.com/keenangit/pasaman/tree/v1-session-cookies-auth) branch or [v1.0.5 release](https://github.com/keenangit/pasaman/releases/tag/1.05) that supported the authentication using the **session** and **cookies** stored in **Redis** if needed.
-
-- [RedisStore](https://github.com/gin-gonic/contrib/tree/master/sessions): Gin middleware for session management with multi-backend support (currently cookie, Redis).
-
-## Contribution
-
-You are welcome to contribute to keep it up to date and always improving!
-
-If you have any question or need help, drop a message at [https://gitter.im/Massad/gin-boilerplate](https://gitter.im/Massad/gin-boilerplate)
-
-## Credit
-
-The implemented JWT inspired from this article: [Using JWT for Authentication in a Golang Application](https://www.nexmo.com/blog/2020/03/13/using-jwt-for-authentication-in-a-golang-application-dr) worth reading it, thanks [Victor Steven](https://medium.com/@victorsteven)
-
----
+Orm - https://github.com/jinzhu/gorm
 
 ## License
-
-(The MIT License)
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The project is developed by [NIX Solutions](http://nixsolutions.com) Go team and distributed under [MIT LICENSE](https://github.com/nixsolutions/golang-echo-boilerplate/blob/master/LICENSE)
