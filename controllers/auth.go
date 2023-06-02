@@ -6,10 +6,10 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/Massad/gin-boilerplate/forms"
-	"github.com/Massad/gin-boilerplate/models"
 	"github.com/gin-gonic/gin"
 	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/keenangit/pasaman/forms"
+	"github.com/keenangit/pasaman/models"
 )
 
 //AuthController ...

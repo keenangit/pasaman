@@ -3,16 +3,14 @@ package models
 import (
 	"errors"
 
-	"github.com/Massad/gin-boilerplate/db"
-	"github.com/Massad/gin-boilerplate/forms"
-	"gorm.io/gorm"
+	"github.com/keenangit/pasaman/db"
+	"github.com/keenangit/pasaman/forms"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 //User ...
 type User struct {
-	gorm.Model
 	ID        int64  `db:"id, primarykey, autoincrement" json:"id"`
 	Email     string `db:"email" json:"email"`
 	Password  string `db:"password" json:"-"`
