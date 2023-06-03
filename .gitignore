@@ -1,5 +1,21 @@
-main
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+
+# Logs #
+######################
+*.log
+
+# SENSITVE DATA #
+.gitconfig
 .env
-.env.testing
-/.idea
-docs
+cert/
+
+# BUILD #
+./gin-boilerplate
+
+*.exe
+.vscode
+*.bat
