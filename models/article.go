@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"errors"
 	"log"
 	"time"
@@ -19,17 +20,19 @@ type Article struct {
 	UrlPhoto  string `db:"url_photo" json:"url_photo"`
 	UpdatedAt int64  `db:"updated_at" json:"updated_at"`
 	CreatedAt int64  `db:"created_at" json:"created_at"`
+	DeletedAt int64  `db:"deleted_at" json:"-"`
 }
 
 //Article ...
 type ArticleResp struct {
-	ID        string `db:"id, primarykey" json:"id"`
-	UserID    string `db:"user_id" json:"-"`
-	Title     string `db:"title" json:"title"`
-	Content   string `db:"content" json:"content"`
-	UrlPhoto  string `db:"url_photo" json:"url_photo"`
-	UpdatedAt int64  `db:"updated_at" json:"updated_at"`
-	CreatedAt int64  `db:"created_at" json:"created_at"`
+	ID string `db:"id, primarykey" json:"id"`
+	// UserID    string         `db:"user_id" json:"-"`
+	Title    string         `db:"title" json:"title"`
+	Content  string         `db:"content" json:"content"`
+	UrlPhoto sql.NullString `db:"url_photo" json:"url_photo"`
+	// UpdatedAt int64          `db:"updated_at" json:"updated_at"`
+	// CreatedAt int64          `db:"created_at" json:"created_at"`
+	// DeletedAt sql.NullString `db:"deleted_at" json:"-"`
 }
 
 //ArticleModel ...
@@ -66,7 +69,7 @@ func (m ArticleModel) Create(userID string, form forms.CreateArticleForm) (artic
 
 //One ...
 func (m ArticleModel) One(userID string, id string) (Article, error) {
-	// err = db.GetDB().SelectOne(&article, "SELECT a.id, a.title, a.content, a.updated_at, a.created_at, json_build_object('id', u.id, 'name', u.name, 'email', u.email) AS user FROM public.article a LEFT JOIN public.user u ON a.user_id = u.id WHERE a.user_id=$1 AND a.id=$2 LIMIT 1", userID, id)
+	// err = db.GetDB().SelectOne(&article, "SELECT a.id, a.title, a.content, a.updated_at, a.created_at, json_build_object('id', u.id, 'name', u.name, 'email', u.email) AS user FROM article a LEFT JOIN user u ON a.user_id = u.id WHERE a.user_id=$1 AND a.id=$2 LIMIT 1", userID, id)
 	var art Article
 	err := db.GetDB().SelectOne(&art, "SELECT title FROM tb_article where user_id=? and id=?", userID, id)
 	checkErr(err, "Select failed")
@@ -77,7 +80,7 @@ func (m ArticleModel) One(userID string, id string) (Article, error) {
 //All ...
 func (m ArticleModel) GetAll(userID string) ([]ArticleResp, error) {
 	var art []ArticleResp
-	_, err := db.GetDB().Select(&art, "SELECT * FROM tb_article where user_id=?", userID)
+	_, err := db.GetDB().Select(&art, "SELECT id, title, content, url_photo FROM tb_article where deleted_at is null")
 	checkErr(err, "Select failed")
 
 	return art, err
@@ -90,15 +93,9 @@ func checkErr(err error, msg string) {
 }
 
 //Update ...
-func (m ArticleModel) Update(userID string, id int64, form forms.CreateArticleForm) (err error) {
-	//METHOD 1
-	//Check the article by ID using this way
-	// _, err = m.One(userID, id)
-	// if err != nil {
-	// 	return err
-	// }
+func (m ArticleModel) Update(userID string, id string, form forms.CreateArticleForm) (err error) {
 
-	operation, err := db.GetDB().Exec("UPDATE public.article SET title=$2, content=$3, url_photo=$4 WHERE id=$1", id, form.Title, form.Content, form.UrlPhoto)
+	operation, err := db.GetDB().Exec("UPDATE tb_article SET title=?, content=?, url_photo=? WHERE id=?", form.Title, form.Content, form.UrlPhoto, id)
 	if err != nil {
 		return err
 	}
@@ -113,8 +110,9 @@ func (m ArticleModel) Update(userID string, id int64, form forms.CreateArticleFo
 
 //Delete ...
 func (m ArticleModel) Delete(userID, id string) (err error) {
-
-	operation, err := db.GetDB().Exec("DELETE FROM public.article WHERE id=$1", id)
+	now := time.Now()
+	// operation, err := db.GetDB().Exec("DELETE FROM tb_article WHERE id=$1", id)
+	operation, err := db.GetDB().Exec("UPDATE tb_article SET deleted_at=$2 WHERE id=$1", id, now.Unix())
 	if err != nil {
 		return err
 	}

@@ -27,12 +27,16 @@ type Pengaduan struct {
 
 //Pengaduan ...
 type PengaduanResp struct {
-	ID        string `db:"id, primarykey" json:"id"`
-	UserID    string `db:"user_id" json:"-"`
-	Title     string `db:"title" json:"title"`
-	Content   string `db:"content" json:"content"`
-	UpdatedAt int64  `db:"updated_at" json:"updated_at"`
-	CreatedAt int64  `db:"created_at" json:"created_at"`
+	ID           string `db:"id, primarykey" json:"id"`
+	NamaLengkap  string `db:"nama_lengkap" json:"nama_lengkap"`
+	Alamat       string `db:"alamat" json:"alamat"`
+	NomorHP      string `db:"nomorhp" json:"nomorhp"`
+	Email        string `db:"email" json:"email"`
+	Pekerjaan    string `db:"pekerjaan" json:"pekerjaan"`
+	Tujuan       string `db:"tujuan" json:"tujuan"`
+	IsiPengaduan string `db:"isi_pengaduan" json:"isi_pengaduan"`
+	UpdatedAt    int64  `db:"updated_at" json:"updated_at"`
+	CreatedAt    int64  `db:"created_at" json:"created_at"`
 }
 
 //PengaduanModel ...
@@ -78,7 +82,7 @@ func (m PengaduanModel) One(userID string, id string) (Pengaduan, error) {
 //All ...
 func (m PengaduanModel) GetAll(userID string) ([]PengaduanResp, error) {
 	var art []PengaduanResp
-	_, err := db.GetDB().Select(&art, "SELECT * FROM tb_pengaduan where user_id=?", userID)
+	_, err := db.GetDB().Select(&art, "SELECT * FROM tb_pengaduan")
 	checkErr(err, "Select failed")
 
 	return art, err
@@ -86,12 +90,6 @@ func (m PengaduanModel) GetAll(userID string) ([]PengaduanResp, error) {
 
 //Update ...
 func (m PengaduanModel) Update(userID string, id int64, form forms.CreatePengaduanForm) (err error) {
-	//METHOD 1
-	//Check the pengaduan by ID using this way
-	// _, err = m.One(userID, id)
-	// if err != nil {
-	// 	return err
-	// }
 
 	operation, err := db.GetDB().Exec("UPDATE pengaduan SET title=$2, content=$3 WHERE id=$1", id, form.NamaLengkap, form.NomorHP)
 	if err != nil {

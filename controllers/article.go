@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"strconv"
-
 	"github.com/keenangit/pasaman/forms"
 	"github.com/keenangit/pasaman/models"
 
@@ -40,7 +38,8 @@ func (ctrl ArticleController) Create(c *gin.Context) {
 
 //All ...
 func (ctrl ArticleController) All(c *gin.Context) {
-	userID := getUserID(c)
+	// userID := getUserID(c)
+	userID := "public"
 
 	results, err := articleModel.GetAll(userID)
 	if err != nil {
@@ -72,12 +71,6 @@ func (ctrl ArticleController) Update(c *gin.Context) {
 
 	id := c.Param("id")
 
-	getID, err := strconv.ParseInt(id, 10, 64)
-	if getID == 0 || err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"Message": "Invalid parameter"})
-		return
-	}
-
 	var form forms.CreateArticleForm
 
 	if validationErr := c.ShouldBindJSON(&form); validationErr != nil {
@@ -86,7 +79,7 @@ func (ctrl ArticleController) Update(c *gin.Context) {
 		return
 	}
 
-	err = articleModel.Update(userID, getID, form)
+	err := articleModel.Update(userID, id, form)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, gin.H{"Message": "Article could not be updated"})
 		return

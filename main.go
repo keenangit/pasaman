@@ -108,7 +108,7 @@ func main() {
 		article := new(controllers.ArticleController)
 
 		v1.POST("/article", TokenAuthMiddleware(), article.Create)
-		v1.POST("/articles", TokenAuthMiddleware(), article.All)
+		v1.POST("/articles", article.All)
 		v1.GET("/article/:id", TokenAuthMiddleware(), article.One)
 		v1.PUT("/article/:id", TokenAuthMiddleware(), article.Update)
 		v1.DELETE("/article/:id", TokenAuthMiddleware(), article.Delete)
@@ -116,7 +116,7 @@ func main() {
 		/*** START Pengaduan ***/
 		pengaduan := new(controllers.PengaduanController)
 
-		v1.POST("/pengaduan", TokenAuthMiddleware(), pengaduan.Create)
+		v1.POST("/pengaduan", pengaduan.Create)
 		v1.POST("/pengaduans", TokenAuthMiddleware(), pengaduan.All)
 		v1.GET("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.One)
 		v1.PUT("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Update)

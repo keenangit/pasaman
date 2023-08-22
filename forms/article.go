@@ -11,9 +11,9 @@ type ArticleForm struct{}
 
 //CreateArticleForm ...
 type CreateArticleForm struct {
-	Title    string `form:"title" json:"title" binding:"required,min=3,max=100"`
-	Content  string `form:"content" json:"content" binding:"required,min=3,max=1000"`
-	UrlPhoto string `form:"urlPhoto" json:"urlPhoto" binding:"required,min=3,max=1000"`
+	Title    string `form:"title" json:"title" binding:"required,min=3,max=200"`
+	Content  string `form:"content" json:"content" binding:"required,min=3,max=10000000"`
+	UrlPhoto string `form:"url_photo" json:"url_photo"`
 }
 
 //Title ...
@@ -25,7 +25,7 @@ func (f ArticleForm) Title(tag string, errMsg ...string) (message string) {
 		}
 		return errMsg[0]
 	case "min", "max":
-		return "Title should be between 3 to 100 characters"
+		return "Title should be between 3 to 200 characters"
 	default:
 		return "Something went wrong, please try again later"
 	}
