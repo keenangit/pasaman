@@ -11,8 +11,9 @@ type ArticleForm struct{}
 
 //CreateArticleForm ...
 type CreateArticleForm struct {
-	Title   string `form:"title" json:"title" binding:"required,min=3,max=100"`
-	Content string `form:"content" json:"content" binding:"required,min=3,max=1000"`
+	Title    string `form:"title" json:"title" binding:"required,min=3,max=100"`
+	Content  string `form:"content" json:"content" binding:"required,min=3,max=1000"`
+	UrlPhoto string `form:"urlPhoto" json:"urlPhoto" binding:"required,min=3,max=1000"`
 }
 
 //Title ...

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"runtime"
 
 	"github.com/gin-contrib/gzip"
@@ -107,7 +108,7 @@ func main() {
 		article := new(controllers.ArticleController)
 
 		v1.POST("/article", TokenAuthMiddleware(), article.Create)
-		v1.GET("/articles", TokenAuthMiddleware(), article.All)
+		v1.POST("/articles", TokenAuthMiddleware(), article.All)
 		v1.GET("/article/:id", TokenAuthMiddleware(), article.One)
 		v1.PUT("/article/:id", TokenAuthMiddleware(), article.Update)
 		v1.DELETE("/article/:id", TokenAuthMiddleware(), article.Delete)
@@ -116,15 +117,33 @@ func main() {
 		pengaduan := new(controllers.PengaduanController)
 
 		v1.POST("/pengaduan", TokenAuthMiddleware(), pengaduan.Create)
-		v1.GET("/pengaduans", TokenAuthMiddleware(), pengaduan.All)
+		v1.POST("/pengaduans", TokenAuthMiddleware(), pengaduan.All)
 		v1.GET("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.One)
 		v1.PUT("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Update)
 		v1.DELETE("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Delete)
-	}
 
+		r.MaxMultipartMemory = 8 << 20 // 8 MiB
+		v1.POST("/upload", func(c *gin.Context) {
+			// single file
+			file, _ := c.FormFile("file")
+			log.Println(file.Filename)
+
+			// Upload the file to specific dst.
+			// dst := "/upload"
+			dstFilename := os.Getenv("FILE_UPLOAD_PATH") + "/" + filepath.Base(file.Filename)
+			c.SaveUploadedFile(file, dstFilename)
+
+			c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
+		})
+		// r.LoadHTMLFiles("./upload/*")
+
+		// r.Static("/image", "./public/")
+
+	}
 	r.LoadHTMLGlob("./public/html/*")
 
 	r.Static("/public", "./public")
+	r.Static("/img-file", os.Getenv("FILE_UPLOAD_PATH"))
 
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{

@@ -16,6 +16,7 @@ type Article struct {
 	UserID    string `db:"user_id" json:"-"`
 	Title     string `db:"title" json:"title"`
 	Content   string `db:"content" json:"content"`
+	UrlPhoto  string `db:"url_photo" json:"url_photo"`
 	UpdatedAt int64  `db:"updated_at" json:"updated_at"`
 	CreatedAt int64  `db:"created_at" json:"created_at"`
 }
@@ -26,6 +27,7 @@ type ArticleResp struct {
 	UserID    string `db:"user_id" json:"-"`
 	Title     string `db:"title" json:"title"`
 	Content   string `db:"content" json:"content"`
+	UrlPhoto  string `db:"url_photo" json:"url_photo"`
 	UpdatedAt int64  `db:"updated_at" json:"updated_at"`
 	CreatedAt int64  `db:"created_at" json:"created_at"`
 }
@@ -49,7 +51,7 @@ func (m ArticleModel) Create(userID string, form forms.CreateArticleForm) (artic
 	// }
 	// err = db.GetDB().Insert(data)
 
-	operation, err := db.GetDB().Exec("INSERT INTO tb_article(id, user_id, title, content, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?)", id, userID, form.Title, form.Content, now.Unix(), now.Unix())
+	operation, err := db.GetDB().Exec("INSERT INTO tb_article(id, user_id, title, content, url_photo, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?)", id, userID, form.Title, form.Content, form.UrlPhoto, now.Unix(), now.Unix())
 	if err != nil {
 		log.Printf("\n\n ERR: %s", err)
 		return articleID, err
@@ -96,7 +98,7 @@ func (m ArticleModel) Update(userID string, id int64, form forms.CreateArticleFo
 	// 	return err
 	// }
 
-	operation, err := db.GetDB().Exec("UPDATE public.article SET title=$2, content=$3 WHERE id=$1", id, form.Title, form.Content)
+	operation, err := db.GetDB().Exec("UPDATE public.article SET title=$2, content=$3, url_photo=$4 WHERE id=$1", id, form.Title, form.Content, form.UrlPhoto)
 	if err != nil {
 		return err
 	}
