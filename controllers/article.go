@@ -52,7 +52,7 @@ func (ctrl ArticleController) All(c *gin.Context) {
 
 //One ...
 func (ctrl ArticleController) One(c *gin.Context) {
-	userID := getUserID(c)
+	userID := "public"
 
 	id := c.Param("id")
 
