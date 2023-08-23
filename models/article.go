@@ -71,7 +71,7 @@ func (m ArticleModel) Create(userID string, form forms.CreateArticleForm) (artic
 func (m ArticleModel) One(userID string, id string) (Article, error) {
 	// err = db.GetDB().SelectOne(&article, "SELECT a.id, a.title, a.content, a.updated_at, a.created_at, json_build_object('id', u.id, 'name', u.name, 'email', u.email) AS user FROM article a LEFT JOIN user u ON a.user_id = u.id WHERE a.user_id=$1 AND a.id=$2 LIMIT 1", userID, id)
 	var art Article
-	err := db.GetDB().SelectOne(&art, "SELECT title FROM tb_article where id=?", id)
+	err := db.GetDB().SelectOne(&art, "SELECT id, title, content, url_photo FROM tb_article where id=?", id)
 	checkErr(err, "Select failed")
 
 	return art, err
