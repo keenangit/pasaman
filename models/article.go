@@ -80,7 +80,7 @@ func (m ArticleModel) One(userID string, id string) (Article, error) {
 //All ...
 func (m ArticleModel) GetAll(userID string) ([]ArticleResp, error) {
 	var art []ArticleResp
-	_, err := db.GetDB().Select(&art, "SELECT id, title, content, url_photo FROM tb_article where deleted_at is null")
+	_, err := db.GetDB().Select(&art, "SELECT id, title, content, url_photo FROM tb_article where deleted_at is null order by created_at desc")
 	checkErr(err, "Select failed")
 
 	return art, err
@@ -112,7 +112,7 @@ func (m ArticleModel) Update(userID string, id string, form forms.CreateArticleF
 func (m ArticleModel) Delete(userID, id string) (err error) {
 	now := time.Now()
 	// operation, err := db.GetDB().Exec("DELETE FROM tb_article WHERE id=$1", id)
-	operation, err := db.GetDB().Exec("UPDATE tb_article SET deleted_at=$2 WHERE id=$1", id, now.Unix())
+	operation, err := db.GetDB().Exec("UPDATE tb_article SET deleted_at=? WHERE id=?", now.Unix(), id)
 	if err != nil {
 		return err
 	}
