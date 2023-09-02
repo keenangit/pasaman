@@ -14,6 +14,7 @@ import (
 	"github.com/keenangit/pasaman/controllers"
 	"github.com/keenangit/pasaman/db"
 	"github.com/keenangit/pasaman/forms"
+	"github.com/keenangit/pasaman/migrations"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -85,6 +86,10 @@ func main() {
 	//Example: db.GetDB() - More info in the models folder
 	db.Init()
 
+	db.InitGorm()
+
+	migrations.AMigrate()
+
 	//Start Redis on database 1 - it's used to store the JWT but you can use it for anythig else
 	//Example: db.GetRedis().Set(KEY, VALUE, at.Sub(now)).Err()
 	db.InitRedis(1)
@@ -117,10 +122,29 @@ func main() {
 		pengaduan := new(controllers.PengaduanController)
 
 		v1.POST("/pengaduan", pengaduan.Create)
-		v1.POST("/pengaduans", TokenAuthMiddleware(), pengaduan.All)
-		v1.GET("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.One)
-		v1.PUT("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Update)
-		v1.DELETE("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Delete)
+		v1.POST("/pengaduan/export", TokenAuthMiddleware(), pengaduan.Export)
+		// v1.POST("/pengaduans", TokenAuthMiddleware(), pengaduan.All)
+		// v1.GET("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.One)
+		// v1.PUT("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Update)
+		// v1.DELETE("/pengaduan/:id", TokenAuthMiddleware(), pengaduan.Delete)
+
+		/***  pendaftaran ***/
+		pendaftaran := new(controllers.PendaftaranController)
+
+		v1.POST("/pendaftaran", pendaftaran.Create)
+		v1.POST("/pendaftaran/export", TokenAuthMiddleware(), pendaftaran.Export)
+
+		/***  Perusahaan ***/
+		perusahaan := new(controllers.PerusahaanController)
+
+		v1.POST("/perusahaan", perusahaan.Create)
+		v1.POST("/perusahaan/export", TokenAuthMiddleware(), perusahaan.Export)
+
+		/***  Informasi ***/
+		informasi := new(controllers.InformasiController)
+
+		v1.POST("/informasi", informasi.Create)
+		v1.POST("/informasi/export", TokenAuthMiddleware(), informasi.Export)
 
 		r.MaxMultipartMemory = 8 << 20 // 8 MiB
 		v1.POST("/upload", func(c *gin.Context) {
