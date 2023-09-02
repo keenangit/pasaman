@@ -58,19 +58,6 @@ func ConnectDB(dataSourceName string) (*gorp.DbMap, error) {
 	return dbmap, nil
 }
 
-// type Pengaduan struct {
-// 	ID           string `db:"id, primarykey" json:"id"`
-// 	NamaLengkap  string `db:"nama_lengkap" json:"nama_lengkap"`
-// 	Alamat       string `db:"alamat" json:"alamat"`
-// 	NomorHP      string `db:"nomorhp" json:"nomorhp"`
-// 	Email        string `db:"email" json:"email"`
-// 	Pekerjaan    string `db:"pekerjaan" json:"pekerjaan"`
-// 	Tujuan       string `db:"tujuan" json:"tujuan"`
-// 	IsiPengaduan string `db:"isi_pengaduan" json:"isi_pengaduan"`
-// 	UpdatedAt    int64  `db:"updated_at" json:"updated_at"`
-// 	CreatedAt    int64  `db:"created_at" json:"created_at"`
-// }
-
 func checkErr(err error, msg string) {
 	if err != nil {
 		log.Fatalln(msg, err)

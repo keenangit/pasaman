@@ -53,12 +53,12 @@ func (uv V3Convert) StructToSliceOfSliceWithHeader(data interface{}) [][]string 
 	structType := value.Index(0).Type()
 	numFields := structType.NumField()
 
-	header := make([]string, numFields)
+	// header := make([]string, numFields)
 	result := make([][]string, numRows)
 
-	for i := 0; i < numFields; i++ {
-		header[i] = structType.Field(i).Name
-	}
+	// for i := 0; i < numFields; i++ {
+	// 	header[i] = structType.Field(i).Name
+	// }
 
 	for i := 0; i < numRows; i++ {
 		result[i] = make([]string, numFields)
@@ -68,7 +68,7 @@ func (uv V3Convert) StructToSliceOfSliceWithHeader(data interface{}) [][]string 
 			result[i][j] = fmt.Sprintf("%v", field.Interface())
 		}
 	}
-	result = append([][]string{header}, result...)
+	// result = append([][]string{header}, result...)
 
 	return result
 }
