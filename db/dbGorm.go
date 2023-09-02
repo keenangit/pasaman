@@ -20,7 +20,7 @@ func InitGorm() {
 		panic("failed Gorm to connect database")
 	}
 
-	// dbGorm.AutoMigrate(&Product{})
+	// defer dbGorm.Statement.ReflectValue.Close()
 
 }
 
