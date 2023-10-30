@@ -7,11 +7,13 @@ echo $ip
 
 openssl genrsa -out myCA.key 2048
 
-openssl req -x509 -new -key myCA.key -out myCA.cer -days 730 -subj /CN=api.investdpmptsp.pasamankab.go.id
+openssl req -x509 -new -key myCA.key -out myCA.cer -days 730 -subj /CN=$ip
+# openssl req -x509 -new -key myCA.key -out myCA.cer -days 730 -subj /CN=api.investdpmptsp.pasamankab.go.id
 
 openssl genrsa -out mycert1.key 2048
 
-openssl req -new -out mycert1.req -key mycert1.key -subj /CN=api.investdpmptsp.pasamankab.go.id
+openssl req -new -out mycert1.req -key mycert1.key -subj /CN=$ip
+# openssl req -new -out mycert1.req -key mycert1.key -subj /CN=api.investdpmptsp.pasamankab.go.id
 
 openssl x509 -req -in mycert1.req -out mycert1.cer -CAkey myCA.key -CA myCA.cer -days 365 -CAcreateserial -CAserial serial
 
