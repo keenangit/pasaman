@@ -54,7 +54,7 @@ func (m ArticleModel) Create(userID string, form forms.CreateArticleForm) (artic
 	// }
 	// err = db.GetDB().Insert(data)
 
-	operation, err := db.GetDB().Exec("INSERT INTO tb_article(id, user_id, title, content, url_photo, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?)", id, userID, form.Title, form.Content, form.UrlPhoto, now.Unix(), now.Unix())
+	operation, err := db.GetDB().Exec("INSERT INTO tb_article(id, user_id, title, content, url_photo, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?)", id, userID, form.Title, form.Content, form.UrlPhoto, now.Unix(), now.Unix())
 	if err != nil {
 		log.Printf("\n\n ERR: %s", err)
 		return articleID, err
